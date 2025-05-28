@@ -1,0 +1,9 @@
+{
+    "Jalat": ["Kyykky", "Maastaveto", "Reiden ojennus", "Reiden koukstius", "Pohkeet", "Jalkaprässi"],
+    "Työntävät": ["Penkkipunnerrus", "Vinopenkkipunnerrus", "Pystypunnerrus","dippi", "Skullcrusher", "Pushdown", "Vipunosto"],
+    "Vetävät": ["Kulmasoutu", "Leuanveto", "Ylätalja", "Alatalja", "Pullover", "Hauiskääntö","Tuettu hauiskääntö","Hammerkääntö", "Facepull"],
+    "Rinta/Hauis": ["Vinopenkkipunnerrus", "Hauiskääntö", "Tuettu hauiskääntö", "Hammerkääntö","Ristikkäistalja"],
+    "Selkä/Ojentajat": ["Kulmasoutu", "Leuanveto", "Ylätalja", "Alatalja", "Pullover", "Skullcrusher","Pushdown"],
+    "Kädet": ["Hauiskääntö","Tuettu hauiskääntö","Hammerkääntö", "Skullcrusher", "Pushdown" ]
+  }
+
