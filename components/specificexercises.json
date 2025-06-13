@@ -1,0 +1,29 @@
+{
+
+ "Kyykky": ["Takakyykky", "Etukyykky", "Hack kyykky", "Smith kyykky", "Bulgarialainen askelkyykky"],
+ "Maastaveto": ["Maastaveto", "Maastaveto - sjmv", "Maastaveto - rdl"],
+ "Reiden koukstius": [,"Reiden koukistus - istualteen", "Reiden koukistus - maaten"],
+ "Reiden ojennus": ["Reiden ojennus"],
+ "Pohkeet": ["Pohkeet - istualteen", "Pohkeet - seisten"],
+
+ "Penkkipunnerrus": ["Penkkipunnerrus - tnk", "Penkkipunnerrus - kp","Penkkipunnerrus - smith","Penkkipunnerrus - laite"],
+ "Vinopenkkipunnerrus": ["Vinopenkkipunnerrus - tnk", "Vinopenkkipunnerrus - kp","Vinopenkkipunnerrus - smith","Vinopenkkipunnerrus - laite"],
+ "Pystypunnerrus": ["Pystypunnerrus - tnk", "Pystypunnerrus - kp","Pystypunnerrus - smith"], 
+ "Skullcrusher": ["skullcrusher - tnk", "skullcrusher - kp"], 
+ "dippi": ["dippi"],
+ "Pushdown": ["Pushdown - köysi", "Pushdown - tnk"],
+ "Vipunosto": ["Vipunosto (sivulle) - kp", "Vipunosto (sivulle) - talja", "Vipunosto (sivulle) - laite","Vipunosto (eteen) - kp", "Vipunosto (eteen) - talja", "Vipunosto (eteen) - laite", "Vipunosto (taakse) - kp", "Vipunosto (taakse) - talja","Vipunosto (taakse) - laite"],
+
+ "Pullover": ["Pullover - talja", "Pullover - laite", "Pullover -kp"],
+ "Leuanveto": ["Leuanveto"],
+ "Ylätalja": ["Ylätalja"],
+ "Alatalja": ["Alatalja"],
+ "Facepull": ["Facepull"],
+ "Kulmasoutu": ["Kulmasoutu - tnk","Kulmasoutu - T-tnk", "Kulmasoutu - laite", "Kulmasoutu - yhdenkäden"], 
+ "Hauiskääntö": ["Hauiskääntö - tnk","Hauiskääntö - kp","Hauiskääntö - talja"],
+ "Tuettu hauiskääntö": ["Tuettu hauiskääntö - tnk","Tuettu hauiskääntö - kp", "Tuettu hauiskääntö - laite"],
+ "Hammerkääntö": ["Hammerkääntö - tnk","Hammerkääntö - kp","Hammerkääntö - talja"]
+ 
+
+}
+

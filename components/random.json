@@ -1,0 +1,102 @@
+<TouchableOpacity
+              style={{ position: 'absolute', top: 170, left: 20, backgroundColor: 'green', padding: 10, borderRadius: 8, zIndex: 100 }}
+              onPress={addManualWorkout}
+            >
+              <Text style={{ color: 'white', fontWeight: 'bold' }}>Lisää manuaalinen treeni</Text>
+            </TouchableOpacity>
+
+
+
+category: 'Työntävät',
+    date: '11.4.2025',
+    workout: [
+      {
+        exercise: 'Penkkipunnerrus - tnk',
+        sets: [
+          { reps: 6, weight: 92.5 },
+          { reps: 6, weight: 87.5 },
+        ]
+      },
+      {
+        exercise: 'Vinopenkkipunnerrus - kp',
+        sets: [
+          { reps: 9, weight: 35 },
+          { reps: 9, weight: 30 },
+        ]
+      },
+      {
+        exercise: 'Pushdown - köysi',
+        sets: [
+          { reps: 9, weight: 40 },
+          { reps: 10, weight: 35 },
+          { reps: 10, weight: 30 },
+        ]
+      },
+         
+    ]
+
+
+
+category: 'Vetävät',
+    date: '10.4.2025',
+    workout: [
+      {
+        exercise: 'Pullover - talja',
+        sets: [
+          { reps: 11, weight: 47.5 },
+          { reps: 11, weight: 42.5 },
+        ]
+      },
+       {
+        exercise: 'Ylätalja',
+        sets: [
+          { reps: 6, weight: 77.5 },
+          { reps: 6, weight: 72.5 },
+          { reps: 7, weight: 65 },
+        ]
+      },
+      {
+        exercise: 'Hauiskääntö - kp',
+        sets: [
+          { reps: 9, weight: 25 },
+          { reps: 9, weight: 22.5 },
+          { reps: 9, weight: 20 },
+        ]
+      },
+         
+    ]
+
+  category: 'Jalat',
+    date: '8.4.2025',
+    workout: [
+      {
+        exercise: 'Takakyykky',
+        sets: [
+          { reps: 7, weight: 110 },
+          { reps: 6, weight: 105 },
+        ]
+      },
+       {
+        exercise: 'Maastaveto - sjmv',
+        sets: [
+          { reps: 9, weight: 100 },
+          { reps: 8, weight: 95 },
+        ]
+      },
+      {
+        exercise: 'Reiden ojennus',
+        sets: [
+          { reps: 8, weight: 80 },
+          { reps: 9, weight: 75 },
+          { reps: 9, weight: 70 },
+        ]
+      },
+      {
+        exercise: 'Reiden koukistus - istualteen',
+        sets: [
+          { reps: 8, weight: 65 },
+          { reps: 8, weight: 60 },
+          { reps: 9, weight: 55 },
+        ]
+      },
+    ]            
