@@ -4,9 +4,11 @@ import { Picker } from '@react-native-picker/picker';
 import Icon from 'react-native-vector-icons/Entypo';
 import { useRouter } from 'expo-router';
 
+
 const Home = () => {
   const router = useRouter();
   const [selectedValue, setSelectedValue] = useState('Jalat');
+  
   return (
     <>
       <SafeAreaView style={styles.container}>
@@ -16,7 +18,7 @@ const Home = () => {
         </View>
         <View style={styles.photoContainer}>
           <Image
-            source={require('./assets/muscular.png')} // Lisää kuva assets-kansiosta
+            source={require('../../assets/muscular.png')} // Lisää kuva assets-kansiosta
             style={styles.image}
           />
         </View>
@@ -68,15 +70,16 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#1E1E1E',
-    padding: 20,
+    padding: 15,
     width: '100%',
     height: '15%',
     alignItems: 'center',
   },
   headerText: {
+    fontFamily: 'Futura',
     color: 'white',
     marginTop: 50,
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: 'bold',
 
 
@@ -106,12 +109,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#1E1E1E',
   },
   buttonContainer: {
-    height: 100,
+    height: 130,
     flexDirection: 'row',
     gap: '150',
-    alignItems: 'center',
     backgroundColor: '#1E1E1E',
-    width: '100%'
+    width: '100%',
+    borderTopWidth: 2,
+    borderTopColor: 'grey',
+  },
+  button1: {
+    backgroundColor: '#1E1E1E',
+    width: 170,
+    height: 60,
+    paddingHorizontal: 2,
+
   }
   
 }); 

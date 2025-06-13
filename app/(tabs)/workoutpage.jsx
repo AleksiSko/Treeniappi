@@ -9,13 +9,15 @@ import AddIcon from 'react-native-vector-icons/MaterialIcons';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import exercises from './assets/exercises.json'; // Tuo JSON-tiedosto
-import specificexercises from './assets/specificexercises.json';
+import exercises from '../components/exercises.json'; // Tuo JSON-tiedosto
+import specificexercises from '../components/specificexercises.json';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 
 
 
-import Set1 from './assets/set1';
-import MovementsPage from './assets/movements';
+import Set1 from '../components/set1';
+import MovementsPage from '../components/movements';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 import { store } from 'expo-router/build/global-state/router-store';
 
@@ -145,6 +147,7 @@ const addManualWorkout = async () => {
 
   const saveData = () => {
     const newData = {
+      id: uuidv4(),
       category: category,
       date: formattedDate,
       workout: workoutData,
@@ -193,24 +196,8 @@ const addManualWorkout = async () => {
   }
 
 
-  const panResponder = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: (evt, gestureState) => {
-        return Math.abs(gestureState.dx) > Math.abs(gestureState.dy);
-      },
-      onPanResponderRelease: (evt, gestureState) => {
-        if (gestureState.dx > 70) {
-          setStep((prevStep) => Math.max(prevStep - 1, 0));
-          }          
-           
-          else if (gestureState.dx > 70) {
-          setStep((prevStep) => Math.max(prevStep - 1, 0)); // Vähennä askel, mutta ei alle 0
-        }
-      },
-    })
-  ).current;
   return (
-      <SafeAreaView style={styles.container} {...panResponder.panHandlers}>
+      <SafeAreaView style={styles.container}>
          <View style = {styles.header}>
           <Text style={{ color: 'white', fontSize: 10 }}>WorkoutPage</Text>
          </View>
@@ -324,7 +311,7 @@ const addManualWorkout = async () => {
         {step === 6 && (
         <>
           <Image
-            source={require('./assets/mostmuscular.png')} // Lisää kuva assets-kansiosta
+            source={require('../../assets/mostmuscular.png')} // Lisää kuva assets-kansiosta
             style={styles.image}
           />
           <TouchableOpacity style = {styles.image1} onPress={() => {

@@ -5,7 +5,7 @@ import { Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import lodash from 'lodash';
 import Icon from 'react-native-vector-icons/Ionicons'
-import ProgressFilterpage from './assets/progressfilterpage';
+import ProgressFilterpage from '../components/progressfilterpage';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 import { ScrollView } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -239,9 +239,9 @@ const handleExerciseChange = (workout, exercise, highligted) => {
         </Modal>
 
         {exerciseFilter && workoutFilter ? (
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Text style = {{color: 'white', fontSize: 24, fontWeight: 'bold'}}>{workoutFilter} : </Text>
-        <Text style = {{color: 'grey', fontSize: 24, fontWeight: 'bold'}}>{exerciseFilter}</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 15 }}>
+        <Text style = {{color: 'white', fontSize: 21, fontWeight: 'bold'}}>{workoutFilter} : </Text>
+        <Text style = {{color: 'grey', fontSize: 19, fontWeight: 'bold',  }}>{exerciseFilter}</Text>
         </View>
         ) : (
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
