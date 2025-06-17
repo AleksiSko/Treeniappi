@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, FlatList,Keyboard, TouchableWithoutFeedback, ScrollView, } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, FlatList,Keyboard, TouchableWithoutFeedback, ScrollView, KeyboardAvoidingView } from 'react-native'
 import React, { useState,useEffect, useRef,useMemo  } from 'react';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -8,6 +8,9 @@ import Dots from 'react-native-vector-icons/Entypo'
 import { Menu, Provider, TextInput } from 'react-native-paper';
 import PlusIcon from 'react-native-vector-icons/Entypo'
 import { Swipeable } from 'react-native-gesture-handler';
+import exercises from '../components/exercises.json';
+import specificexercises from '../components/specificexercises.json';
+import TrashIcon from 'react-native-vector-icons/EvilIcons'
 
 
 
@@ -27,7 +30,14 @@ const historypage = () => {
   const [timefilter, setTimeFilter] = useState('1');
   const [menuVisible, setMenuVisible] = React.useState(false);
   const [menuAnchor, setMenuAnchor] = React.useState(null);
-  const [addNewset, setAddNewSet] = useState(false)
+  const [addNewset, setAddNewSet] = useState(false);
+  const [addNewExercise, setAddnewExercise] = useState(false);
+  const [selectedExercise, setSelectedExercise] = useState();
+  const [selectedSpecifiedExercise,setSelectedSpecifiedExercise] = useState();
+  const [showExerciseList, setShowExerciseList] = useState(true);
+  const [showSpecifiedExerciseList, setShowSpecifiedExerciseList] = useState(false)
+
+  
 
 
 
@@ -136,7 +146,7 @@ const handleEdit = async () => {
     console.error(e)
     }
 }
-const handleaddnewset = (exerciseindex) => {
+const handleaddnewset = (exerciseindex)  => {
   const updateditem = { ... editItem };
 
   updateditem.workout[exerciseindex].sets.push({
@@ -148,10 +158,32 @@ const handleaddnewset = (exerciseindex) => {
 
 
 }
+const handleaddnewexercise = (exercise) => {
+  const newWorkout = {
+    exercise: exercise,
+    sets: [
+      {reps: 0, weight: 0}
+    ]
+  };
+  setEditItem(prev => ({
+    ...prev,
+    workout: [...prev.workout, newWorkout]
+  }));
+  console.log(editItem)
 
-const addNewExercise = () => {
+  }
 
+const handleDeleteItem = (exercise) => {
+  const updatedWorkout = editItem.workout.filter(item => 
+    (item.exercise !== exercise)
+  )
+  setEditItem(prev => ({
+    ...prev,
+    workout: updatedWorkout
+  }))
 }
+
+
   return (
   <Provider>
     <SafeAreaView style = {styles.container}>
@@ -166,16 +198,79 @@ const addNewExercise = () => {
           <TouchableWithoutFeedback onPress={() => 
             Keyboard.dismiss()
           }>          
-            <View style={styles.editContainer}>
+            <KeyboardAvoidingView behavior="position" style={styles.editContainer}>
+              {addNewExercise && (      
+              <View style = {styles.addNewExerciseContainer}>
+                <View style = {styles.addNewExerciseHeaderContainer}>
+                <TouchableOpacity
+                  onPress={() => setAddnewExercise(false)}>
+                  <Text style = {{fontSize: 18, fontStyle: 'bold', alignSelf: 'flex-start', marginHorizontal: 10}}>Peruuta</Text>  
+                </TouchableOpacity>  
+                </View>
+                {showExerciseList && (
+                <View style = {{flex: 1}}>  
+                <FlatList
+                data = {exercises[editItem.category]}
+                keyExtractor={( item ) => (item)}
+                renderItem={({ item }) => (
+                  <TouchableOpacity style = {{width: 400, height: 60, backgroundColor: 'grey', borderWidth: 1, borderColor: 'white'}}
+                  onPress = {() => {
+                    setShowExerciseList(false)
+                    setSelectedExercise(item);
+                    setShowSpecifiedExerciseList(true)
+
+                  }}>
+                  <Text style = {{fontSize: 20, fontStyle: 'bold', alignSelf: 'center', color: 'white'}}>{item}</Text>  
+                  </TouchableOpacity>
+                )}    
+                >
+                </FlatList>
+                </View>
+                )}
+                {showSpecifiedExerciseList && (
+                <View style = {{flex: 1}}>
+                <FlatList
+                data = {specificexercises[selectedExercise].filter
+                  (item => !editItem.workout.some((workout) => (
+                    item === workout.exercise
+                  )))
+                  
+                }
+                keyExtractor={( item ) => (item)}
+                renderItem={({ item }) => (
+                  <TouchableOpacity style = {{width: 400, height: 60, backgroundColor: 'grey', borderWidth: 1, borderColor: 'white'}}
+                  onPress = {() => {
+                    setAddnewExercise(false)
+                    handleaddnewexercise(item)
+                    setShowExerciseList(false)
+                    setShowSpecifiedExerciseList(false);
+                  }}>
+                  <Text style = {{fontSize: 20, fontStyle: 'bold', alignSelf: 'center', color: 'white'}}>{item}</Text>  
+                  </TouchableOpacity>
+                )}    
+                >
+                </FlatList>
+                </View>
+                )}   
+              </View>
+              )}
               <View style = {styles.editHeaderContainer}>
                 <TouchableOpacity onPress={() => setShowEdit(false)}>
-                <Text style={{color: 'white', marginTop: 20, fontSize: 18, fontStyle: 'bold'}}>Sulje</Text>
+                <Text style={{color: 'white', fontSize: 18, fontStyle: 'bold'}}>Sulje</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => { 
-                  setShowEdit(false)
-                  handleEdit()
+                  if (editItem.workout.every((workout) => (
+                      workout.sets.every((sets) => (
+                      sets.weight > 0 && sets.reps > 0
+                      ))
+                    ))) 
+                    {
+                    setShowEdit(false)
+                    handleEdit()
+                    }
+                
                   }}>
-                <Text style={{color: 'white', marginTop: 20,fontSize: 18, fontStyle: 'bold'}}>Tallenna</Text>
+                <Text style={{color: 'white',fontSize: 18, fontStyle: 'bold'}}>Tallenna</Text>
                 </TouchableOpacity>
               </View>
             <ScrollView contentContainerStyle = {{flexGrow: 1}}>
@@ -184,8 +279,19 @@ const addNewExercise = () => {
 
             </View>
             {editItem.workout.map((workout, idx) => (
-              <View key = {idx} style = {styles.editItemContainer}> 
-              <Text style = {{alignSelf: 'center',fontSize: 20, fontStyle: 'bold'}}>{workout.exercise}</Text>
+              <View key = {idx} style = {styles.editItemContainer}>
+                <View style = {styles.editItemHeaderContainer}> 
+                <Text style = {{fontSize: 20, fontStyle: 'bold'}}>{workout.exercise}</Text>
+                {editItem.workout.length > 1 && (
+                <TouchableOpacity
+                  style = {{position: 'absolute', right: 40}}
+                  onPress  = {() => {
+                    handleDeleteItem(workout.exercise)
+                  }}>
+                  <TrashIcon name = "trash" size={35} ></TrashIcon>  
+                </TouchableOpacity>
+                )}
+                </View>
               <View style = {styles.editItemInfo}>
                 <Text style = {{marginHorizontal: 10, gap: 20}}>Sarja</Text>
                 <Text style = {{marginHorizontal: 30}}>Edellinen</Text>
@@ -196,30 +302,32 @@ const addNewExercise = () => {
                 <View key = {setsindex} style = {styles.editSetContainer}>       
                   <Text style = {{color: 'black', fontSize: 20, fontStyle: 'bold', fontFamily: 'futura', marginHorizontal: 10}}>{setsindex+1}</Text> 
                   <Text style = {{color: 'grey', fontSize: 17, marginHorizontal:20}}>{sets.reps} x {sets.weight}kg</Text>
-                  <TextInput style = {styles.input}
+                  <TextInput style = {styles.repsinput}
                     value = {sets.reps.toString()}
                     onChangeText = { (text) => {
                       const updatedItem = {...editItem} ;
-                      updatedItem.workout[idx].sets[setsindex].reps = parseInt(text)
+                      updatedItem.workout[idx].sets[setsindex].reps = text === '' ? 0 : parseInt(text)
                       setEditItem(updatedItem)
                     }}
                       
                     keyboardType = "numeric"
-                    selectTextOnFocus={true}>
+                    selectTextOnFocus={true}
+                    maxLength={4}>
                   </TextInput>
-                  <TextInput style = {styles.input}
+                  <TextInput style = {styles.weightinput}
                     value = {sets.weight.toString()}
                     onChangeText = { (text) => {
                       const updatedItem = {...editItem} ;
-                      updatedItem.workout[idx].sets[setsindex].weight = parseFloat(text)
+                      updatedItem.workout[idx].sets[setsindex].weight = text === '' ? 0 : parseFloat(text)
                       setEditItem(updatedItem)
                     }}
                     keyboardType = "numeric"
-                    selectTextOnFocus={true}>
+                    selectTextOnFocus={true}
+                    maxLength={4}>
                   </TextInput>
                 </View>
               ))}
-              <View style = {{width: 40, height: 40, backgroundColor: 'white', marginHorizontal: 12, gap: 20}}>
+              <View style = {{width: 350, height: 100, backgroundColor: 'white', marginHorizontal: 12, gap: 20}}>
                 <TouchableOpacity style = {styles.newSetButton}
                   onPress = {() => {
                     handleaddnewset(idx)
@@ -227,21 +335,23 @@ const addNewExercise = () => {
                   <PlusIcon name = "plus" size={25} color = 'black'>  </PlusIcon>
                   <Text style = {{fontSize: 18, fontStyle: 'bold'}}>Uusi sarja</Text>
                 </TouchableOpacity>
+                {idx === editItem.workout.length -1 && (
                 <TouchableOpacity style = {styles.newExerciseButton}
                   onPress = {() => {
-                    addNewExercise()
+                    setAddnewExercise(true);
+                    setShowExerciseList(true);
+                    
                   }}>
                   <PlusIcon name = "plus" size={25} color = 'white'>  </PlusIcon>
                   <Text style = {{fontSize: 18, fontStyle: 'bold', color: 'white'}}>Uusi liike</Text>
-                </TouchableOpacity>         
-                         
-                            
+                </TouchableOpacity>   
+                )}                                     
                </View>   
-            </View>
-                   
-            ))}                  
+            </View>              
+            ))}  
+    <View style = {{width: 400, height: 150, backgroundColor: '#1E1E1E'}}></View>                         
     </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
          
         )}
@@ -270,7 +380,7 @@ const addNewExercise = () => {
                   contentStyle={{ backgroundColor: 'white' }}
                 >
                   <Menu.Item onPress={() => {
-                     setEditItem(item);
+                     setEditItem(JSON.parse(JSON.stringify(item)));
                      setMenuVisible(false);
                      setShowEdit(true);
                      
@@ -411,7 +521,7 @@ const styles = StyleSheet.create({
   width: '100%',
   height: '100%',
   backgroundColor: 'rgba(0,0,0,0)', 
-  zIndex: 999, 
+  zIndex: 998, 
   justifyContent: 'center',
   alignItems: 'center',
   },
@@ -423,7 +533,7 @@ const styles = StyleSheet.create({
   height: 700,
   width: 400,
   borderRadius: 20,
-  zIndex: 1000,
+  zIndex: 999,
   },
   editHeaderContainer: {
     flexDirection: 'row',
@@ -441,6 +551,15 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 20,
   },
+  editItemHeaderContainer: {
+    width: 400,
+    height: 30,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+
+  },
   editItemInfo: {
     flexDirection: 'row',
     width: 400,
@@ -455,7 +574,23 @@ const styles = StyleSheet.create({
     width: 400,
     height: 45,
     padding: 10,
-    gap: 20,
+    gap: 18,
+
+  },
+   addNewExerciseContainer: {
+    position: 'absolute',
+    top: 0,
+    backgroundColor: 'white',
+    width: 400,
+    height: 700,
+    zIndex: 1000,
+    alignItems: 'flex-start'
+
+  },
+  addNewExerciseHeaderContainer: {
+    height: 40,
+    width: 400,
+    backgroundColor: 'white'
 
   },
 
@@ -473,13 +608,24 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
   },
-  input: {
+  weightinput: {
     height: 25,
     backgroundColor: 'white',
     borderWidth: 1,
+    position: 'absolute',
+    right: 45
   
-
   },
+  repsinput: {
+    height: 25,
+    backgroundColor: 'white',
+    borderWidth: 1,
+    position: 'absolute',
+    right: 135,
+  
+  
+  },
+
 
   defaultItem: {
     padding: 5,
