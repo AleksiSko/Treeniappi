@@ -11,6 +11,9 @@ import { Swipeable } from 'react-native-gesture-handler';
 import exercises from '../components/exercises.json';
 import specificexercises from '../components/specificexercises.json';
 import TrashIcon from 'react-native-vector-icons/EvilIcons'
+import MinusIcon from 'react-native-vector-icons/Entypo'
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
 
 
 
@@ -76,9 +79,11 @@ const clearStorage = async () => {
   }
 };
 
-useEffect(() => {
-  getData();
-}, []);
+useFocusEffect(
+  useCallback(() => {
+    getData();
+  }, [])
+);
 
 const getFilterData = async () => {
   try {
@@ -153,7 +158,7 @@ const handleaddnewset = (exerciseindex)  => {
     reps: 0,
     weight: 0
 
-  })
+  });
   setEditItem(updateditem)
 
 
@@ -182,10 +187,25 @@ const handleDeleteItem = (exercise) => {
     workout: updatedWorkout
   }))
 }
-
+const handleDeleteSet = (exercise) => {
+  const updatedWorkoutData = editItem.workout.map((item => {
+    if (item.exercise !== exercise) {
+      return item;
+    }
+    return {
+      ...item,
+      sets: item.sets.filter((_, index) => index !== item.sets.length - 1)
+    }
+  }));
+  setEditItem(prev => ({
+    ...prev,
+    workout: updatedWorkoutData
+  }));
+}  
+  
 
   return (
-  <Provider>
+    <Provider>
     <SafeAreaView style = {styles.container}>
       {showEdit && ( 
         <View style={styles.editOverlay}></View>
@@ -327,27 +347,42 @@ const handleDeleteItem = (exercise) => {
                   </TextInput>
                 </View>
               ))}
-              <View style = {{width: 350, height: 100, backgroundColor: 'white', marginHorizontal: 12, gap: 20}}>
-                <TouchableOpacity style = {styles.newSetButton}
+              <View style = {{width: 350, height: 100, marginHorizontal: 12, backgroundColor: 'white'}}>
+                <View style = {{width: 350, height: 23, backgroundColor: 'white'}}>
+                {workout.sets.length > 1 && (
+                <TouchableOpacity 
                   onPress = {() => {
-                    handleaddnewset(idx)
+                    handleDeleteSet(workout.exercise)
                   }}>
-                  <PlusIcon name = "plus" size={25} color = 'black'>  </PlusIcon>
-                  <Text style = {{fontSize: 18, fontStyle: 'bold'}}>Uusi sarja</Text>
+                  <MinusIcon name = "squared-minus" size={25} ></MinusIcon>
                 </TouchableOpacity>
-                {idx === editItem.workout.length -1 && (
-                <TouchableOpacity style = {styles.newExerciseButton}
-                  onPress = {() => {
-                    setAddnewExercise(true);
-                    setShowExerciseList(true);
+                )}   
+                </View>    
+                <View style = {{width: 350, height: 50, backgroundColor: 'white', gap: 10,}}>     
+                  <TouchableOpacity style = {styles.newSetButton}
+                    onPress = {() => {
+                      handleaddnewset(idx)
+                    }}>
+                    <PlusIcon name = "plus" size={25} color = 'black'>  </PlusIcon>
+                    <Text style = {{fontSize: 18, fontStyle: 'bold'}}>Uusi sarja</Text>
+                  </TouchableOpacity> 
+                  {idx === editItem.workout.length -1 && (
+                   <View style = {{width: 350, height: 50, backgroundColor: 'white', gap: 10}}> 
+                    <TouchableOpacity style = {styles.newExerciseButton}
+                      onPress = {() => {
+                        setAddnewExercise(true);
+                        setShowExerciseList(true);
+                        
+                      }}>
+                      <PlusIcon name = "plus" size={25} color = 'white'>  </PlusIcon>
+                      <Text style = {{fontSize: 18, fontStyle: 'bold', color: 'white'}}>Uusi liike</Text>
+                    </TouchableOpacity>
+                   </View>   
+                  )} 
                     
-                  }}>
-                  <PlusIcon name = "plus" size={25} color = 'white'>  </PlusIcon>
-                  <Text style = {{fontSize: 18, fontStyle: 'bold', color: 'white'}}>Uusi liike</Text>
-                </TouchableOpacity>   
-                )}                                     
+                </View>                                      
                </View>   
-            </View>              
+              </View>              
             ))}  
     <View style = {{width: 400, height: 150, backgroundColor: '#1E1E1E'}}></View>                         
     </ScrollView>
@@ -435,29 +470,8 @@ const handleDeleteItem = (exercise) => {
             <Text style = {{ color : 'white', fontSize: '20', marginTop: 20}}>Tyhjennä historia</Text>
         </TouchableOpacity>      
       </View>
-
-      <View style = {styles.buttonContainer}>
-        <TouchableOpacity style = {{padding: 10}} onPress={() => 
-            router.push('/')}>    
-            <Text style = {styles.text}>Takaisin</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style = {{padding: 10}}
-          onPress = {() =>
-          router.push({
-          pathname: '/progresspage',
-          params: {dates: dates},
-          })}
-        >
-          <Text style = {styles.text}>Edistyminen</Text>
-        </TouchableOpacity>     
-        
-      
-
-      </View>
-
     </SafeAreaView>
-  </Provider>  
+    </Provider>
 
   );
 }
@@ -467,18 +481,14 @@ export default historypage;
 const styles = StyleSheet.create({
 
   container: {
-    position: 'relative',
-    alignItems: 'center',
     flex: 1,
-    justifyContent: 'center',
+    backgroundColor: '#1E1E1E',
   },
 
   header: {
-    position: 'relative',
     backgroundColor: '#1E1E1E',
-    padding: 20,
     width: '100%',
-    height: '18%',
+    height: '12%',
     alignItems: 'center',
   },
   HeaderText: {
@@ -594,12 +604,14 @@ const styles = StyleSheet.create({
 
   },
 
-  buttonContainer: {
+   buttonContainer: {
+    height: 130,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    height: 110,
-    width: '100%',
+    gap: '150',
     backgroundColor: '#1E1E1E',
+    width: '100%',
+    borderTopWidth: 2,
+    borderTopColor: 'grey',
   },
 
 
@@ -678,6 +690,15 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: 'row',
   },
+  deleteSetbutton: {
+    borderRadius: 5,
+    backgroundColor: 'red', 
+    width: 240, 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    marginTop: 10,
+
+  },
   newExerciseButton: {
     borderRadius: 5,
     backgroundColor: 'blue', 
@@ -686,5 +707,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center', 
     marginTop: 10,
     flexDirection: 'row',
-  }
+  },
 })

@@ -6,9 +6,9 @@ import Icon2 from 'react-native-vector-icons/Foundation'
 import Slider from '@react-native-community/slider';
 import SaveIcon from 'react-native-vector-icons/Entypo';
 import AddIcon from 'react-native-vector-icons/MaterialIcons';
+import Arrow from 'react-native-vector-icons/Entypo';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useRouter, useLocalSearchParams } from 'expo-router';
 import exercises from '../components/exercises.json'; // Tuo JSON-tiedosto
 import specificexercises from '../components/specificexercises.json';
 import 'react-native-get-random-values';
@@ -27,9 +27,7 @@ import { store } from 'expo-router/build/global-state/router-store';
 
 
 
-const WorkoutPage = () => {
-  const router = useRouter();
-  const { category } = useLocalSearchParams(); // Valittu kategoria
+const workoutPage = ({ category, onSavePress }) => {
   const [workoutData, setWorkoutData] = useState([]); // Tallennetaan liikkeet
   const [savedWorkoutData, setSavedWorkoutData] = useState([]); // Tallennetaan liikkeet
   const [selectedExercise, setSelectedExercise] = useState(); // Valittu liike
@@ -152,6 +150,7 @@ const addManualWorkout = async () => {
       date: formattedDate,
       workout: workoutData,
     }
+    console.log("New data to save:", newData);
     setData((prevData) => {
       const newData = [...prevData, newData];
     } 
@@ -183,7 +182,8 @@ const addManualWorkout = async () => {
 
   const handleBackPress = () => {
     if (step === 0) {
-      router.push('/'); 
+      onSavePress(); 
+       
     }
     if (step > 2) {
       setIndex(prev => prev - 1); 
@@ -310,17 +310,19 @@ const addManualWorkout = async () => {
         )}
         {step === 6 && (
         <>
-          <Image
-            source={require('../../assets/mostmuscular.png')} // Lisää kuva assets-kansiosta
-            style={styles.image}
-          />
+          <View style = {styles.image}>
+            <MovementsPage
+            workoutData={workoutData}
+            category={category} 
+            />
+          </View>
           <TouchableOpacity style = {styles.image1} onPress={() => {
-            setStep(0);
-            router.push('/')
+            setStep(0); 
             saveData();
+            onSavePress(); // Kutsu onSavePress, joka sulkee WorkoutPage
             }}> 
         
-            <SaveIcon name = "save" size={150} color = 'white'></SaveIcon>
+            <SaveIcon name = "save" size={130} color = 'white'></SaveIcon>
             <Text style = {{color: 'white', fontSize: 20, fontWeight:'bold', position: 'absolute', left: -170, bottom: -35}}>Uusi liike</Text>
               
           </TouchableOpacity>  
@@ -339,32 +341,18 @@ const addManualWorkout = async () => {
         
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity 
-          style={{right: -150}} 
-          onPressIn={() => {
-            setShow(true); // Näytä MovementsPage
-           
-            }
-          }  
-          
-          onPressOut={() => {
-            setShow(false); // Piilota MovementsPage
-          }    
-          }
-          >
-          <Icon2 name="magnifying-glass" size={50} color="white" />
-        </TouchableOpacity>
-        
+        {step < 6 && ( 
         <TouchableOpacity style={{position: 'absolute', left: 15}} onPress={() => 
           handleBackPress()}> 
-          <Text style = {{fontSize: 20, color: 'white', fontWeight: 'bold', padding: 12}}> Takaisin </Text>
+          <Arrow name = "arrow-long-left" size={50} color = 'white' />
         </TouchableOpacity>
+        )}
       </View>
       </SafeAreaView>  
-)};   
+  )}
+  export default workoutPage;
 
 
-export default WorkoutPage;
 
 const styles = StyleSheet.create({
   container: {
@@ -383,7 +371,6 @@ const styles = StyleSheet.create({
     top: 20,
   },
   photoContainer: {
-    position: 'relative',
     alignItems: 'center',
     width: '100%',
     height: '35%',
@@ -405,10 +392,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   buttonContainer: {
-    height: '10%',
+    height: '5%',
     backgroundColor: '#1E1E1E',
     width: '100%',
     alignItems: 'center',
+    position: 'absolute',
+    top: 20,
   },
   text: {
     fontSize: 18,
@@ -449,8 +438,9 @@ const styles = StyleSheet.create({
   },
   button1: {
     position: 'absolute', 
-    fontSize: 20, right: 130, 
-    bottom: 25,
+    fontSize: 20, 
+    right: 130, 
+    bottom: 60,
     padding: 15,
     borderRadius: 10,
     borderWidth: 2,

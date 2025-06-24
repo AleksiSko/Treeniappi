@@ -350,18 +350,6 @@ const handleExerciseChange = (workout, exercise, highligted) => {
               
       </ProgressFilterpage>
         : null}  
-
-      <View style = {styles.buttonContainer}>
-        <TouchableOpacity style = {{padding: 20}} onPress={() => 
-          router.push('./historypage')}>    
-          <Text style = {{fontSize: 25, color: 'white', fontWeight: 'bold'}}>Takaisin</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style = {{padding: 20,}} onPress={() => 
-          router.push('/')}>    
-          <Home name = "home" size={50} color = 'white'></Home>
-        </TouchableOpacity>
-      </View>
     </SafeAreaView>
   );
 }
@@ -370,36 +358,23 @@ export default ProgressPage;
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
     flex: 1,
     backgroundColor: '#1E1E1E',
-    alignItems: 'center',
-    height: '100%',
   },
   header: {
     flexDirection: 'row',
-    gap: 60,
+    gap: 50,
+    marginHorizontal: 20,
     backgroundColor: '#1E1E1E',
-    width: '100%',
-    height: '15%',
-    padding: 20,
-    alignItems: 'center',
+    width: '90%',
+    height: '10%',
   },
   info: {
     backgroundColor: '#1E1E1E',
     flexDirection: 'row',
-    height: '14%',
+    height: '12%',
     width: '100%',
     alignSelf: 'flex-start',
-  },
-  buttonContainer: {
-  height: '15%',
-  width: '100%',
-  backgroundColor: '#1E1E1E',
-  alignItems: 'center',
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-
   },
   chart: {
     backgroundColor: '#1E1E1E',
